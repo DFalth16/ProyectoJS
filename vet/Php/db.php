@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
 $bd = 'vet_db';
-$usuario = 'root'; // Predeterminado en XAMPP
-$contrasena = ''; // Predeterminado en XAMPP
+$usuario = 'root';
+$contrasena = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$bd", $usuario, $contrasena);

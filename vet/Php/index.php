@@ -1,11 +1,16 @@
 <?php
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include 'db.php';
-
-if (isset($_SESSION['user_id'])) {
-    header('Location: dashboard.php');
+session_start();
+if (!isset($_SESSION['id_usuario'])) {
+    header('Location: inicio_sesion.php');
+    exit;
+} else {
+    header('Location: panel.php');
     exit;
 }
+?>
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
