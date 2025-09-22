@@ -2,7 +2,7 @@
 session_start();
 include '../db.php';
 if (!isset($_SESSION['id_usuario']) || ($_SESSION['rol'] != 3 && $_SESSION['rol'] != 1)) {
-    header('Location: ../inicio_sesion.php');
+    header('Location: ../index.php');
     exit;
 }
 
@@ -17,17 +17,15 @@ $stmt->execute([$id]);
 $cita = $stmt->fetch();
 
 if (!$cita) {
-    echo "Cita no encontrada.";
+    header('Location: listar.php');
     exit;
 }
 
-// Get mascotas y vets
 $stmt = $pdo->query("SELECT * FROM mascotas");
 $mascotas = $stmt->fetchAll();
 $stmt = $pdo->query("SELECT * FROM usuarios WHERE rol = 2");
 $vets = $stmt->fetchAll();
 
-// Update
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_mascota = $_POST['id_mascota'];
     $id_veterinario = $_POST['id_veterinario'];
@@ -47,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="contenedor">
+    <div class="container">
         <h1>Editar Cita</h1>
         <form method="POST">
             <select name="id_mascota" required>
@@ -61,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php endforeach; ?>
             </select>
             <input type="datetime-local" name="fecha_hora" value="<?php echo date('Y-m-d\TH:i', strtotime($cita['fecha_hora'])); ?>" required>
-            <select name="estado">
+            <select name="estado" required>
                 <option value="pendiente" <?php if ($cita['estado'] == 'pendiente') echo 'selected'; ?>>Pendiente</option>
                 <option value="confirmada" <?php if ($cita['estado'] == 'confirmada') echo 'selected'; ?>>Confirmada</option>
                 <option value="cancelada" <?php if ($cita['estado'] == 'cancelada') echo 'selected'; ?>>Cancelada</option>

@@ -1,11 +1,6 @@
 <?php
-session_start();
 include 'db.php';
-
-if (isset($_SESSION['id_usuario'])) {
-    header('Location: panel.php');
-    exit;
-}
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre_usuario = $_POST['nombre_usuario'];
@@ -21,8 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: panel.php');
         exit;
     } else {
-        echo "Credenciales inválidas.";
+        $error = "Credenciales inválidas.";
     }
+}
+
+if (isset($_SESSION['id_usuario'])) {
+    header('Location: panel.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -32,8 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="contenedor">
+    <div class="container">
         <h1>Inicio de Sesión</h1>
+        <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
         <form method="POST">
             <input type="text" name="nombre_usuario" placeholder="Nombre de Usuario" required>
             <input type="password" name="contrasena" placeholder="Contraseña" required>

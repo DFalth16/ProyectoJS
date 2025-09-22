@@ -2,7 +2,7 @@
 session_start();
 include '../db.php';
 if (!isset($_SESSION['id_usuario']) || ($_SESSION['rol'] != 3 && $_SESSION['rol'] != 1)) {
-    header('Location: ../inicio_sesion.php');
+    header('Location: ../index.php');
     exit;
 }
 

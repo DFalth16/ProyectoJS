@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt = $pdo->prepare("INSERT INTO usuarios (nombre_usuario, contrasena, rol, nombre, correo, telefono) VALUES (?, ?, 4, ?, ?, ?)");
     $stmt->execute([$nombre_usuario, $contrasena, $nombre, $correo, $telefono]);
-    header('Location: inicio_sesion.php');
+    header('Location: index.php');
     exit;
 }
 ?>
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="contenedor">
+    <div class="container">
         <h1>Registro de Cliente</h1>
         <form method="POST">
             <input type="text" name="nombre_usuario" placeholder="Nombre de Usuario" required>

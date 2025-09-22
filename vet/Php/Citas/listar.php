@@ -2,13 +2,12 @@
 session_start();
 include '../db.php';
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ../inicio_sesion.php');
+    header('Location: ../index.php');
     exit;
 }
 $rol = $_SESSION['rol'];
 $id_usuario = $_SESSION['id_usuario'];
 
-// Update estado if vet or rec
 if (isset($_GET['confirmar'])) {
     $id = $_GET['confirmar'];
     $stmt = $pdo->prepare("UPDATE citas SET estado = 'confirmada' WHERE id = ?");
@@ -16,9 +15,21 @@ if (isset($_GET['confirmar'])) {
     header('Location: listar.php');
     exit;
 }
-// Similar para cancelar, realizada
+if (isset($_GET['cancelar'])) {
+    $id = $_GET['cancelar'];
+    $stmt = $pdo->prepare("UPDATE citas SET estado = 'cancelada' WHERE id = ?");
+    $stmt->execute([$id]);
+    header('Location: listar.php');
+    exit;
+}
+if (isset($_GET['realizada'])) {
+    $id = $_GET['realizada'];
+    $stmt = $pdo->prepare("UPDATE citas SET estado = 'realizada' WHERE id = ?");
+    $stmt->execute([$id]);
+    header('Location: listar.php');
+    exit;
+}
 
-// Read
 if ($rol == 4) {
     $stmt = $pdo->prepare("SELECT c.*, m.nombre as nombre_mascota, u.nombre as nombre_vet FROM citas c JOIN mascotas m ON c.id_mascota = m.id JOIN usuarios u ON c.id_veterinario = u.id WHERE m.id_dueno = ?");
     $stmt->execute([$id_usuario]);
@@ -37,7 +48,7 @@ $citas = $stmt->fetchAll();
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="contenedor">
+    <div class="container">
         <h1>Citas</h1>
         <table>
             <tr><th>ID</th><th>Mascota</th><th>Veterinario</th><th>Fecha/Hora</th><th>Estado</th><th>Acciones</th></tr>
@@ -54,6 +65,7 @@ $citas = $stmt->fetchAll();
                         <?php if ($rol == 2 || $rol == 3 || $rol == 1): ?>
                             <a href="?confirmar=<?php echo $cita['id']; ?>">Confirmar</a>
                             <a href="?cancelar=<?php echo $cita['id']; ?>">Cancelar</a>
+                            <a href="?realizada=<?php echo $cita['id']; ?>">Realizada</a>
                         <?php endif; ?>
                     </td>
                 </tr>
