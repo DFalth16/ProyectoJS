@@ -1,31 +1,31 @@
-CREATE DATABASE vet_db;
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS vet_db;
 USE vet_db;
 
--- Tabla de Usuarios
+-- Tabla usuarios
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_usuario VARCHAR(50) UNIQUE NOT NULL,
+    nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL,
-    rol INT NOT NULL, -- 1: Administrador, 2: Veterinario, 3: Recepcionista, 4: Cliente
+    rol TINYINT NOT NULL, -- 1: Admin, 2: Veterinario, 3: Recepcionista, 4: Cliente
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL,
     telefono VARCHAR(20)
 );
 
--- Tabla de Mascotas
+-- Tabla mascotas
 CREATE TABLE mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
     especie VARCHAR(50) NOT NULL,
     raza VARCHAR(50),
     edad INT,
     peso DECIMAL(5,2),
-    foto VARCHAR(255), -- Ruta de foto (opcional)
     id_dueno INT NOT NULL,
     FOREIGN KEY (id_dueno) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Tabla de Citas
+-- Tabla citas
 CREATE TABLE citas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_mascota INT NOT NULL,
@@ -36,32 +36,45 @@ CREATE TABLE citas (
     FOREIGN KEY (id_veterinario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Tabla de Productos
+-- Tabla historiales_medicos
+CREATE TABLE historiales_medicos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_mascota INT NOT NULL,
+    fecha DATETIME NOT NULL,
+    diagnostico TEXT NOT NULL,
+    tratamiento TEXT NOT NULL,
+    vacunas TEXT,
+    evolucion TEXT,
+    tipo ENUM('vacunacion', 'internacion', 'revision', 'desparasitacion', 'peluqueria', 'otro') NOT NULL,
+    FOREIGN KEY (id_mascota) REFERENCES mascotas(id) ON DELETE CASCADE
+);
+
+-- Tabla productos
 CREATE TABLE productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     tipo ENUM('alimento', 'medicamento', 'accesorio') NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
-    stock INT DEFAULT 0
+    stock INT NOT NULL
 );
 
--- Tabla de Servicios
+-- Tabla servicios
 CREATE TABLE servicios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     precio DECIMAL(10,2) NOT NULL
 );
 
--- Tabla de Ventas
+-- Tabla ventas
 CREATE TABLE ventas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fecha DATETIME NOT NULL,
     id_cliente INT NOT NULL,
-    total DECIMAL(10,2) NOT NULL,
+    total DECIMAL(10,2) NOT NULL DEFAULT 0,
     FOREIGN KEY (id_cliente) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Tabla de Detalles de Ventas
+-- Tabla detalles_ventas
 CREATE TABLE detalles_ventas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_venta INT NOT NULL,
@@ -72,32 +85,36 @@ CREATE TABLE detalles_ventas (
     FOREIGN KEY (id_venta) REFERENCES ventas(id) ON DELETE CASCADE
 );
 
--- Tabla de Historiales Médicos
-CREATE TABLE historiales_medicos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_mascota INT NOT NULL,
-    fecha DATETIME NOT NULL,
-    diagnostico TEXT,
-    tratamiento TEXT,
-    vacunas TEXT,
-    evolucion TEXT,
-    tipo ENUM('vacunacion', 'internacion', 'revision', 'desparasitacion', 'peluqueria', 'otro') NOT NULL,
-    adjuntos VARCHAR(255), -- Ruta de archivos (opcional)
-    FOREIGN KEY (id_mascota) REFERENCES mascotas(id) ON DELETE CASCADE
-);
+-- Insertar usuario administrador 'leo' con contraseña '12345678'
+INSERT INTO usuarios (nombre_usuario, contrasena, rol, nombre, correo, telefono)
+VALUES ('leo', '$2y$10$YOUR_HASHED_PASSWORD', 1, 'Leonardo', 'leo@example.com', '123456789');
 
--- Tabla de Disponibilidades de Veterinarios (agregada para dinamismo en agenda)
-CREATE TABLE disponibilidades_vet (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_veterinario INT NOT NULL,
-    fecha_hora_inicio DATETIME NOT NULL,
-    fecha_hora_fin DATETIME NOT NULL,
-    FOREIGN KEY (id_veterinario) REFERENCES usuarios(id) ON DELETE CASCADE
-);
+-- Nota: Reemplaza 'YOUR_HASHED_PASSWORD' con el hash real de '12345678'. Para generarlo:
+-- 1. Usa PHP: echo password_hash('12345678', PASSWORD_DEFAULT);
+-- 2. O usa una herramienta en línea segura como https://www.passwordhashgenerator.com/
+-- Ejemplo de hash (puede variar): '$2y$10$.vGA1O9wmRjrwAVmPA9HMO'
 
--- Datos iniciales de ejemplo
-INSERT INTO usuarios (nombre_usuario, contrasena, rol, nombre, correo) VALUES 
-('admin', '$2y$10$K.4w5zY8zF4z4z4z4z4z4uK4z4z4z4z4z4z4z4z4z4z4z4z4z4z4', 1, 'Administrador', 'admin@ejemplo.com'), -- contraseña: admin123
-('vet1', '$2y$10$K.4w5zY8zF4z4z4z4z4z4uK4z4z4z4z4z4z4z4z4z4z4z4z4z4z4', 2, 'Veterinario1', 'vet1@ejemplo.com'), -- contraseña: vet123
-('rec1', '$2y$10$K.4w5zY8zF4z4z4z4z4z4uK4z4z4z4z4z4z4z4z4z4z4z4z4z4z4', 3, 'Recepcionista1', 'rec1@ejemplo.com'), -- contraseña: rec123
-('cliente1', '$2y$10$K.4w5zY8zF4z4z4z4z4z4uK4z4z4z4z4z4z4z4z4z4z4z4z4z4z4', 4, 'Cliente1', 'cliente1@ejemplo.com'); -- contraseña: client123
+-- Insertar algunos datos de ejemplo (opcional)
+INSERT INTO usuarios (nombre_usuario, contrasena, rol, nombre, correo, telefono)
+VALUES 
+('vet1', '$2y$10$ANOTHER_HASH', 2, 'Dr. Juan', 'juan@vet.com', '987654321'),
+('recep1', '$2y$10$ANOTHER_HASH', 3, 'Ana Recepcion', 'ana@vet.com', '456789123'),
+('cliente1', '$2y$10$ANOTHER_HASH', 4, 'Maria Cliente', 'maria@client.com', '321654987');
+
+INSERT INTO mascotas (nombre, especie, raza, edad, peso, id_dueno)
+VALUES ('Max', 'Perro', 'Labrador', 3, 25.5, 4);
+
+INSERT INTO citas (id_mascota, id_veterinario, fecha_hora, estado)
+VALUES (1, 2, '2025-09-22 10:00:00', 'pendiente');
+
+INSERT INTO productos (nombre, tipo, precio, stock)
+VALUES ('Comida Premium', 'alimento', 50.00, 100);
+
+INSERT INTO servicios (nombre, precio)
+VALUES ('Consulta General', 30.00);
+
+INSERT INTO ventas (fecha, id_cliente, total)
+VALUES ('2025-09-21 14:00:00', 4, 50.00);
+
+INSERT INTO detalles_ventas (id_venta, tipo_item, id_item, cantidad, precio)
+VALUES (1, 'producto', 1, 2, 25.00);
