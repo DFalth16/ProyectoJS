@@ -2,14 +2,16 @@
 session_start();
 include '../db.php';
 if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 1) {
-    header('Location: ../inicio_sesion.php');
-    exit;
+header('Location: ../index.php'); // tu login con Vue + Axios
+exit;
+
 }
 
 // Create
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre_usuario = $_POST['nombre_usuario'];
-    $contrasena = password_hash($_POST['contrasena'], PASSWORD_DEFAULT);
+    $contrasena = $_POST['contrasena'];
+
     $rol = $_POST['rol'];
     $nombre = $_POST['nombre'];
     $correo = $_POST['correo'];

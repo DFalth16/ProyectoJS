@@ -2,7 +2,7 @@
 session_start();
 include '../db.php';
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ../inicio_sesion.php');
+    header('Location: ../index.php'); // Cambiado login
     exit;
 }
 $rol = $_SESSION['rol'];
@@ -21,23 +21,48 @@ $mascotas = $stmt->fetchAll();
 <head>
     <title>Listar Mascotas</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        table img {
+            max-width: 80px;
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="contenedor">
         <h1>Mascotas</h1>
-        <table>
-            <tr><th>ID</th><th>Nombre</th><th>Especie</th><th>Raza</th><th>Edad</th><th>Peso</th><th>Acciones</th></tr>
+        <a href="crear.php" class="btn">+ Registrar Mascota</a>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th>ID</th>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Edad</th>
+                <th>Peso</th>
+                <th>Acciones</th>
+            </tr>
             <?php foreach ($mascotas as $masc): ?>
                 <tr>
                     <td><?php echo $masc['id']; ?></td>
-                    <td><?php echo $masc['nombre']; ?></td>
-                    <td><?php echo $masc['especie']; ?></td>
-                    <td><?php echo $masc['raza']; ?></td>
-                    <td><?php echo $masc['edad']; ?></td>
-                    <td><?php echo $masc['peso']; ?></td>
+                    <td>
+                        <?php if (!empty($masc['foto']) && file_exists('../uploads/' . $masc['foto'])): ?>
+                            <img src="../uploads/<?php echo $masc['foto']; ?>" alt="Foto de <?php echo $masc['nombre']; ?>">
+                        <?php else: ?>
+                            Sin foto
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo htmlspecialchars($masc['nombre']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['especie']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['raza']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['edad']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['peso']); ?></td>
                     <td>
                         <a href="editar.php?id=<?php echo $masc['id']; ?>">Editar</a>
-                        <a href="eliminar.php?id=<?php echo $masc['id']; ?>">Eliminar</a>
+                        <a href="eliminar.php?id=<?php echo $masc['id']; ?>" onclick="return confirm('¿Eliminar esta mascota?')">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
