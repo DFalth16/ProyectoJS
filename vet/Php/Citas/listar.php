@@ -2,71 +2,67 @@
 session_start();
 include '../db.php';
 if (!isset($_SESSION['id_usuario'])) {
-    header('Location: ../index.php');
+    header('Location: ../index.php'); // Cambiado login
     exit;
 }
 $rol = $_SESSION['rol'];
-$id_usuario = $_SESSION['id_usuario'];
-
-if (isset($_GET['confirmar'])) {
-    $id = $_GET['confirmar'];
-    $stmt = $pdo->prepare("UPDATE citas SET estado = 'confirmada' WHERE id = ?");
-    $stmt->execute([$id]);
-    header('Location: listar.php');
-    exit;
-}
-if (isset($_GET['cancelar'])) {
-    $id = $_GET['cancelar'];
-    $stmt = $pdo->prepare("UPDATE citas SET estado = 'cancelada' WHERE id = ?");
-    $stmt->execute([$id]);
-    header('Location: listar.php');
-    exit;
-}
-if (isset($_GET['realizada'])) {
-    $id = $_GET['realizada'];
-    $stmt = $pdo->prepare("UPDATE citas SET estado = 'realizada' WHERE id = ?");
-    $stmt->execute([$id]);
-    header('Location: listar.php');
-    exit;
-}
+$id_dueno = $_SESSION['id_usuario'];
 
 if ($rol == 4) {
-    $stmt = $pdo->prepare("SELECT c.*, m.nombre as nombre_mascota, u.nombre as nombre_vet FROM citas c JOIN mascotas m ON c.id_mascota = m.id JOIN usuarios u ON c.id_veterinario = u.id WHERE m.id_dueno = ?");
-    $stmt->execute([$id_usuario]);
-} elseif ($rol == 2) {
-    $stmt = $pdo->prepare("SELECT c.*, m.nombre as nombre_mascota, cl.nombre as nombre_cliente FROM citas c JOIN mascotas m ON c.id_mascota = m.id JOIN usuarios cl ON m.id_dueno = cl.id WHERE c.id_veterinario = ?");
-    $stmt->execute([$id_usuario]);
+    $stmt = $pdo->prepare("SELECT * FROM mascotas WHERE id_dueno = ?");
+    $stmt->execute([$id_dueno]);
 } else {
-    $stmt = $pdo->query("SELECT c.*, m.nombre as nombre_mascota, cl.nombre as nombre_cliente, u.nombre as nombre_vet FROM citas c JOIN mascotas m ON c.id_mascota = m.id JOIN usuarios cl ON m.id_dueno = cl.id JOIN usuarios u ON c.id_veterinario = u.id");
+    $stmt = $pdo->query("SELECT * FROM mascotas");
 }
-$citas = $stmt->fetchAll();
+$mascotas = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listar Citas</title>
+    <title>Listar Mascotas</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        table img {
+            max-width: 80px;
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Citas</h1>
-        <table>
-            <tr><th>ID</th><th>Mascota</th><th>Veterinario</th><th>Fecha/Hora</th><th>Estado</th><th>Acciones</th></tr>
-            <?php foreach ($citas as $cita): ?>
+    <div class="contenedor">
+        <h1>Mascotas</h1>
+        <a href="crear.php" class="btn">+ Registrar Mascota</a>
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th>ID</th>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Edad</th>
+                <th>Peso</th>
+                <th>Acciones</th>
+            </tr>
+            <?php foreach ($mascotas as $masc): ?>
                 <tr>
-                    <td><?php echo $cita['id']; ?></td>
-                    <td><?php echo $cita['nombre_mascota']; ?></td>
-                    <td><?php echo $cita['nombre_vet']; ?></td>
-                    <td><?php echo $cita['fecha_hora']; ?></td>
-                    <td><?php echo $cita['estado']; ?></td>
+                    <td><?php echo $masc['id']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $cita['id']; ?>">Editar</a>
-                        <a href="eliminar.php?id=<?php echo $cita['id']; ?>">Eliminar</a>
-                        <?php if ($rol == 2 || $rol == 3 || $rol == 1): ?>
-                            <a href="?confirmar=<?php echo $cita['id']; ?>">Confirmar</a>
-                            <a href="?cancelar=<?php echo $cita['id']; ?>">Cancelar</a>
-                            <a href="?realizada=<?php echo $cita['id']; ?>">Realizada</a>
+                        <?php if (!empty($masc['foto']) && file_exists('../uploads/' . $masc['foto'])): ?>
+                            <img src="../uploads/<?php echo $masc['foto']; ?>" alt="Foto de <?php echo $masc['nombre']; ?>">
+                        <?php else: ?>
+                            Sin foto
                         <?php endif; ?>
+                    </td>
+                    <td><?php echo htmlspecialchars($masc['nombre']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['especie']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['raza']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['edad']); ?></td>
+                    <td><?php echo htmlspecialchars($masc['peso']); ?></td>
+                    <td>
+                        <a href="editar.php?id=<?php echo $masc['id']; ?>">Editar</a>
+                        <a href="eliminar.php?id=<?php echo $masc['id']; ?>" onclick="return confirm('¿Eliminar esta mascota?')">Eliminar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
