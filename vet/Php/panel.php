@@ -77,7 +77,7 @@ function roleNameFromSession() {
           <h4 id="accesos-titulo" class="mb-3">Accesos rápidos</h4>
           <div class="row g-3 align-items-stretch">
             <div class="col-12 col-sm-6 col-md-4 d-flex">
-              <a href="Mascotas/listar.php" class="text-decoration-none w-100">
+              <a href="Mascotas/vermis_mascotas.php" class="text-decoration-none w-100">
                 <div class="card card-action h-100">
                   <div class="card-body d-flex align-items-start gap-3">
                     <i class="bi bi-paw fs-4"></i>
@@ -177,40 +177,100 @@ function roleNameFromSession() {
       </section>
     <?php endif; ?>
 
-    <!-- ADMINISTRADOR -->
-    <?php if ($rol === 1): ?>
-      <section>
-        <h4>Panel Administrador</h4>
-        <div class="row g-3">
-          <div class="col-md-4">
-            <a href="Usuarios/listar.php" class="text-decoration-none">
-              <div class="card card-action">
-                <div class="card-body d-flex gap-3 align-items-start">
-                  <i class="bi bi-people fs-4"></i>
-                  <div>
-                    <h6 class="mb-1">Gestionar Usuarios</h6>
-                    <p class="mb-0 text-muted small">Crear, editar y eliminar cuentas.</p>
-                  </div>
-                </div>
+<!-- ADMINISTRADOR -->
+<?php if ($rol === 1): ?>
+  <section>
+    <h4>Panel Administrador</h4>
+    <div class="row g-3">
+
+      <div class="col-md-4">
+        <a href="Usuarios/listar.php" class="text-decoration-none">
+          <div class="card card-action">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-people fs-4"></i>
+              <div>
+                <h6 class="mb-1">Gestionar Usuarios</h6>
+                <p class="mb-0 text-muted small">Crear, editar y eliminar cuentas.</p>
               </div>
-            </a>
+            </div>
           </div>
-          <div class="col-md-4">
-            <a href="reportes.php" class="text-decoration-none">
-              <div class="card card-action">
-                <div class="card-body d-flex gap-3 align-items-start">
-                  <i class="bi bi-bar-chart-line fs-4"></i>
-                  <div>
-                    <h6 class="mb-1">Reportes</h6>
-                    <p class="mb-0 text-muted small">Ventas, citas y estadísticas.</p>
-                  </div>
-                </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="reportes.php" class="text-decoration-none">
+          <div class="card card-action">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-bar-chart-line fs-4"></i>
+              <div>
+                <h6 class="mb-1">Reportes</h6>
+                <p class="mb-0 text-muted small">Ventas, citas y estadísticas.</p>
               </div>
-            </a>
+            </div>
           </div>
-        </div>
-      </section>
-    <?php endif; ?>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="Mascotas/listar.php" class="text-decoration-none">
+          <div class="card card-action">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-paw fs-4"></i>
+              <div>
+                <h6 class="mb-1">Mascotas</h6>
+                <p class="mb-0 text-muted small">Ver y gestionar todas las mascotas registradas.</p>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="Citas/listar.php" class="text-decoration-none">
+          <div class="card card-action">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-calendar fs-4"></i>
+              <div>
+                <h6 class="mb-1">Citas</h6>
+                <p class="mb-0 text-muted small">Gestionar todas las citas programadas.</p>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="Ventas/listar.php" class="text-decoration-none">
+          <div class="card card-action">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-receipt-cutoff fs-4"></i>
+              <div>
+                <h6 class="mb-1">Ventas</h6>
+                <p class="mb-0 text-muted small">Revisar y administrar todas las ventas.</p>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="Historiales_Medicos/listar.php" class="text-decoration-none">
+          <div class="card card-action">
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="bi bi-journal-medical fs-4"></i>
+              <div>
+                <h6 class="mb-1">Historial Médico</h6>
+                <p class="mb-0 text-muted small">Consultar todos los historiales médicos registrados.</p>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </section>
+<?php endif; ?>
+
 
     <footer class="mt-5">
       <div class="text-center text-muted">
