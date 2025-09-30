@@ -91,21 +91,22 @@ function roleNameFromSession() {
             </div>
 
             <div class="col-12 col-sm-6 col-md-4 d-flex">
-              <a href="Citas/crear.php" class="text-decoration-none w-100">
+             <a href="Citas/mis_citas.php" class="text-decoration-none w-100">
                 <div class="card card-action h-100">
                   <div class="card-body d-flex align-items-start gap-3">
                     <i class="bi bi-calendar-plus fs-4"></i>
                     <div>
-                      <h6 class="mb-1">Agendar Cita</h6>
-                      <p class="mb-0 small">Solicita una consulta rápida con nuestros veterinarios.</p>
+                     <h6 class="mb-1">Mis Citas</h6>
+                     <p class="mb-0 small">Ver todas las citas de tus mascotas.</p>
                     </div>
                   </div>
                 </div>
               </a>
             </div>
 
+
             <div class="col-12 col-sm-6 col-md-4 d-flex">
-              <a href="Historiales_Medicos/listar.php" class="text-decoration-none w-100">
+              <a href="Historiales_Medicos/HistorialMedico.php" class="text-decoration-none w-100">
                 <div class="card card-action h-100">
                   <div class="card-body d-flex align-items-start gap-3">
                     <i class="bi bi-journal-medical fs-4"></i>
@@ -118,8 +119,9 @@ function roleNameFromSession() {
               </a>
             </div>
 
+            
             <div class="col-12 col-sm-6 col-md-4 d-flex">
-              <a href="Ventas/listar.php" class="text-decoration-none w-100">
+              <a href="Ventas/NotasVentas.php" class="text-decoration-none w-100">
                 <div class="card card-action h-100">
                   <div class="card-body d-flex align-items-start gap-3">
                     <i class="bi bi-receipt-cutoff fs-4"></i>
@@ -133,22 +135,7 @@ function roleNameFromSession() {
             </div>
           </div>
 
-          <!-- Ayuda -->
-          <div class="mt-4">
-            <div class="card info-card">
-              <div class="card-body">
-                <h5 class="card-title">¿Necesitas ayuda?</h5>
-                <p class="card-text">
-                  Si tienes problemas para agendar o acceder a tus datos, comunícate con la recepción o envía un correo a
-                  <a class="accent-link" href="mailto:soporte@vet.com">soporte@vet.com</a>.
-                </p>
-                <div class="d-flex gap-2">
-                  <a href="Citas/crear.php" class="btn btn-primary">Agendar cita</a>
-                  <a href="contacto.php" class="btn btn-outline-secondary">Contactar soporte</a>
-                </div>
-              </div>
-            </div>
-          </div>
+ 
         </div>
       </section>
     <?php endif; ?>

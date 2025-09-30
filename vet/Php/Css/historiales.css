@@ -1,0 +1,76 @@
+/* css/historiales.css — estilo separado para listar historiales (fondo menos opaco) */
+
+/* Paleta */
+:root{
+  --accent: #00e5ff;
+  --accent-dark: #00c7d9;
+  --panel-bg: #f6f8fa;
+  --card-bg: #ffffff;
+  --muted: #6c757d;
+  --text: #0b1720;
+}
+
+/* Fondo con imagen1.png (ruta relativa desde Historiales_Medicos/listar.php -> ../img/imagen1.png)
+   NOTA: aquí aplico overlay más transparente para que la imagen sea más clara */
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  /* overlay más transparente para que la imagen se vea más clara */
+  background: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35)), 
+              url('../img/imagen1.png') center / cover no-repeat fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: auto; /* ayuda a mantener nitidez */
+  background-attachment: fixed;
+}
+
+
+/* Layout principal */
+main { padding-top: 24px; padding-bottom: 40px; }
+.container { max-width: 1150px; }
+
+/* Card de filtros */
+.card { border-radius: 10px; }
+.card .form-label.small { font-size: .82rem; color: var(--muted); }
+
+/* Table container */
+.table-responsive { background: rgba(255,255,255,0.95); padding: 12px; border-radius: 10px; }
+
+/* Table styling */
+.table th, .table td { vertical-align: middle; }
+.table thead.table-light th { font-weight:700; }
+
+/* Small text handling */
+.text-sm { font-size: .92rem; color: var(--muted); }
+
+/* Badges personalizados */
+.badge { font-weight:700; padding: .45em .6em; border-radius: .6rem; }
+
+/* Botones */
+.btn-outline-primary, .btn-outline-danger, .btn-light { border-radius: 8px; }
+
+/* Sombra y card feel */
+.shadow-sm { box-shadow: 0 10px 28px rgba(11,20,34,0.06); }
+
+/* Responsive: tabla a stacked rows en pantallas pequeñas */
+@media (max-width: 767.98px) {
+  .table-responsive { padding: 8px; }
+  .table thead { display: none; }
+  .table, .table tbody, .table tr, .table td { display: block; width: 100%; }
+  .table tr { margin-bottom: 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.04); padding-bottom: 0.75rem; }
+  .table td { text-align: right; padding-left: 50%; position: relative; }
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 12px;
+    width: calc(50% - 24px);
+    text-align: left;
+    font-weight: 700;
+    color: var(--muted);
+  }
+}
+
+/* Footer area */
+.mt-4 { margin-top: 1.5rem !important; }
